@@ -1,6 +1,5 @@
 import os
 import sys
-import textnode
 from copyover import copy_over
 from generatepage import generate_pages_recursive
 
@@ -16,9 +15,6 @@ def main():
         basepath = "/" + basepath
     if not basepath.endswith("/"):
         basepath = basepath + "/"
-
-    node = textnode.TextNode("This is some anchor text", "link", "https://boot.dev")
-    print(node.__repr__())
 
     copy_over(src, output_dir)
 
