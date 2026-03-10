@@ -4,11 +4,11 @@ import textnode
 from copyover import copy_over
 from generatepage import generate_pages_recursive
 
-src = os.path.join(os.getcwd(), "static")
-dest = os.path.join(os.getcwd(), "../docs")
-content_src = os.path.join(os.getcwd(), "content")
-template = os.path.join(os.getcwd(), "template.html")
-content_dest = os.path.join(os.getcwd(), "docs")
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+src = os.path.join(project_root, "static")
+content_src = os.path.join(project_root, "content")
+template = os.path.join(project_root, "template.html")
+output_dir = os.path.join(project_root, "docs")
 
 def main():
     basepath = sys.argv[1] if len(sys.argv) > 1 else "/"
@@ -20,9 +20,9 @@ def main():
     node = textnode.TextNode("This is some anchor text", "link", "https://boot.dev")
     print(node.__repr__())
 
-    copy_over(src, dest)
+    copy_over(src, output_dir)
 
-    generate_pages_recursive(content_src, template, content_dest, basepath=basepath)
+    generate_pages_recursive(content_src, template, output_dir, basepath=basepath)
 
 
 main()
