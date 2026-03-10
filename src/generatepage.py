@@ -11,9 +11,9 @@ def extract_title(markdown):
     raise Exception("No title found")
 
 
-src = os.path.join(os.getcwd(), "src/content", "index.md")
-template = os.path.join(os.getcwd(), "template.html")
-dest = os.path.join(os.getcwd(), "public", "index.html")
+# src = os.path.join(os.getcwd(), "src/content", "index.md")
+# template = os.path.join(os.getcwd(), "template.html")
+# dest = os.path.join(os.getcwd(), "public", "index.html")
 
 def generate_page(src_path, template_path, dest_path):
     print(f'Generating from {src_path} to {dest_path} using {template_path}')
@@ -29,14 +29,23 @@ def generate_page(src_path, template_path, dest_path):
 
     title = extract_title(markdown)
 
-    page = template.replace("{{title}}", title)
-    page = page.replace("{{content}}", html_content)
+    page = template.replace("{{ Title }}", title)
+    page = page.replace("{{ Content }}", html_content)
 
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 
     with open(dest_path, "w") as dest_file:
         dest_file.write(page)
 
-    print(html_content)
+def generate_pages_recursive(content_dir, template_path, dest_dir):
+    for f in os.listdir(content_dir):
+        content_path = os.path.join(content_dir, f)
+        dest_path = os.path.join(dest_dir, f)
 
-generate_page(src, template, dest)
+        if os.path.isdir(content_path):
+            os.makedirs(dest_path)
+            generate_pages_recursive(content_path, template_path, dest_path)
+        else:
+            name = os.path.splitext(f)[0]
+            dest_path = os.path.join(name + ".html")
+            generate_page(content_path, template_path, dest_path)
