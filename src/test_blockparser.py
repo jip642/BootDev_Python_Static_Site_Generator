@@ -1,5 +1,6 @@
 import unittest
-from blockparser import markdown_to_blocks
+from blockparser import markdown_to_blocks, block_to_block_type
+from sitetypes import BlockType
 
 class TestBlockParser(unittest.TestCase):
     def test_markdown_to_blocks(self):
@@ -108,3 +109,44 @@ Paragraph after list
                 "Paragraph after list",
             ],
         )
+
+class TestBlockTypes(unittest.TestCase):
+
+    def test_heading(self):
+        block = "# Heading text"
+        self.assertEqual(block_to_block_type(block), BlockType.HEADING)
+
+
+    def test_paragraph(self):
+        block = "This is a normal paragraph."
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+
+
+    def test_code_block(self):
+        block = "```\nprint('hello')\n```"
+        self.assertEqual(block_to_block_type(block), BlockType.CODE)
+
+
+    def test_quote_block(self):
+        block = ">This is a quote\n>Another quote line"
+        self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
+
+
+    def test_unordered_list(self):
+        block = "- item one\n- item two\n- item three"
+        self.assertEqual(block_to_block_type(block), BlockType.UNORDERED_LIST)
+
+
+    def test_ordered_list(self):
+        block = "1. first\n2. second\n3. third"
+        self.assertEqual(block_to_block_type(block), BlockType.ORDERED_LIST)
+
+
+    def test_invalid_ordered_list(self):
+        block = "1. first\n3. third"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+
+
+    def test_multiline_paragraph(self):
+        block = "This is a paragraph\nthat continues on another line."
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
