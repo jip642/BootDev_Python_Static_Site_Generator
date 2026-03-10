@@ -1,4 +1,5 @@
 import os
+import shutil
 from markdown_to_html import markdown_to_html_node
 
 def extract_title(markdown):
@@ -63,3 +64,10 @@ def generate_pages_recursive(content_dir, template_path, dest_dir, root_content_
                 output_name = name + ".html"
             dest_path = os.path.join(dest_dir, output_name)
             generate_page(content_path, template_path, dest_path, basepath)
+
+            # For nested index.md files, also emit index.html so URLs like /blog/tom/
+            # resolve correctly on static hosts (e.g. GitHub Pages).
+            if in_nested_dir and name == "index":
+                index_alias = os.path.join(dest_dir, "index.html")
+                if index_alias != dest_path:
+                    shutil.copy2(dest_path, index_alias)
