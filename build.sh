@@ -1,1 +1,1 @@
-python3 src/main.py "/BootDev_Python_Static_Site_Generator/"
+python3 src/main.py /BootDev_Python_Static_Site_Generator/
